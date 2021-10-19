@@ -1,0 +1,49 @@
+The basics:
+-----------
+Each model is a Python class that subclasses django.db.models.Model.
+Each attribute of the model represents a database field.
+With all of this, Django gives you an automatically-generated database-access API;
+
+
+from django.db import models
+
+class Person(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+
+
+The above Person model would create a database table like this:
+
+CREATE TABLE myapp_person (
+    "id" serial NOT NULL PRIMARY KEY,
+    "first_name" varchar(30) NOT NULL,
+    "last_name" varchar(30) NOT NULL
+);
+
+Some technical notes:
+
+1.The name of the table, myapp_person, is automatically derived from some model metadata but can be overridden.
+ A model’s database table name is constructed by joining the model’s “app label” – the name you used in 
+ manage.py startapp – to the model’s class name, with an underscore between them.
+
+ To override the database table name, use the db_table parameter in class Meta.
+ class Person(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+
+    class Meta:
+        db_table = 'person'
+
+2.An id field is added automatically, but this behavior can be overridden.
+Automatic primary key fields¶
+By default, Django gives each model an auto-incrementing primary key with the type specified per app in AppConfig.default_auto_field or globally in the DEFAULT_AUTO_FIELD setting. For example:
+
+id = models.BigAutoField(primary_key=True)
+
+Note:
+1.You can add null=True to any field except primary key
+2.Altering database filed also require adding null=True
+Field types:-
+
+titile = models.CharField(max_length=100)#max_length is required
+price = models.DecimalField(max_digits=5, decimal_places=2)#required
